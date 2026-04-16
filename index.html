@@ -12,23 +12,23 @@
     <!-- START-BILDSCHIRM -->
     <section id="screen-start" class="screen active">
       <header class="hero">
-        <div class="globe">🌍</div>
+        <div class="globe" aria-hidden="true">🌍</div>
         <h1>Aurang</h1>
-        <p class="tagline">Das Geografie-Quiz für alle</p>
+        <p class="tagline">Das Geografie-Quiz im Kahoot-Stil – für Jung und Alt</p>
       </header>
 
       <div class="card">
-        <h2>Modus wählen</h2>
+        <h2>Spielmodus</h2>
         <div class="options" role="radiogroup" aria-label="Spielmodus">
           <label class="option-tile">
-            <input type="radio" name="mode" value="capital" checked />
-            <span class="tile-icon">🏛️</span>
-            <span class="tile-label">Hauptstädte raten</span>
+            <input type="radio" name="mode" value="flag" checked />
+            <span class="tile-icon">🚩</span>
+            <span class="tile-label">Flagge → Land</span>
           </label>
           <label class="option-tile">
-            <input type="radio" name="mode" value="flag" />
-            <span class="tile-icon">🚩</span>
-            <span class="tile-label">Flaggen raten</span>
+            <input type="radio" name="mode" value="capital" />
+            <span class="tile-icon">🏛️</span>
+            <span class="tile-label">Hauptstadt zum Land</span>
           </label>
           <label class="option-tile">
             <input type="radio" name="mode" value="country" />
@@ -38,7 +38,7 @@
           <label class="option-tile">
             <input type="radio" name="mode" value="mixed" />
             <span class="tile-icon">🎲</span>
-            <span class="tile-label">Gemischt</span>
+            <span class="tile-label">Alles gemischt</span>
           </label>
         </div>
 
@@ -105,7 +105,31 @@
           </label>
         </div>
 
-        <button id="btn-start" class="btn btn-primary btn-lg">Quiz starten</button>
+        <h2>Zeit pro Frage</h2>
+        <div class="options" role="radiogroup" aria-label="Zeit pro Frage">
+          <label class="option-tile">
+            <input type="radio" name="time" value="10" />
+            <span class="tile-icon">⚡</span>
+            <span class="tile-label">10 s – Blitz</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="time" value="15" checked />
+            <span class="tile-icon">⏱️</span>
+            <span class="tile-label">15 s – Normal</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="time" value="30" />
+            <span class="tile-icon">🐢</span>
+            <span class="tile-label">30 s – Entspannt</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="time" value="0" />
+            <span class="tile-icon">♾️</span>
+            <span class="tile-label">Ohne Zeitdruck</span>
+          </label>
+        </div>
+
+        <button id="btn-start" class="btn btn-primary btn-lg">▶ Quiz starten</button>
 
         <div class="highscore-box">
           <span class="highscore-label">🏆 Bestleistung:</span>
@@ -114,34 +138,77 @@
       </div>
 
       <footer class="footer">
-        <small>Tipp: Mit den Tasten 1–4 kannst du Antworten auswählen.</small>
+        <small>Tasten 1–4 für Antworten · Enter für Weiter</small>
       </footer>
     </section>
 
-    <!-- QUIZ-BILDSCHIRM -->
+    <!-- QUIZ-BILDSCHIRM (Kahoot-Stil) -->
     <section id="screen-quiz" class="screen">
-      <div class="quiz-header">
-        <button id="btn-back" class="btn btn-ghost" aria-label="Zurück">← Menü</button>
-        <div class="progress-wrap">
-          <div class="progress-info">
-            <span id="progress-text">Frage 1/10</span>
-            <span id="score-text">Punkte: 0</span>
+      <div class="quiz-topbar">
+        <button id="btn-back" class="btn btn-ghost" aria-label="Zurück zum Menü">← Menü</button>
+        <div class="quiz-stats">
+          <div class="stat-chip">
+            <span class="stat-chip-label">Frage</span>
+            <span id="progress-text" class="stat-chip-value">1/10</span>
           </div>
-          <div class="progress-bar">
-            <div id="progress-fill" class="progress-fill"></div>
+          <div class="stat-chip stat-chip-score">
+            <span class="stat-chip-label">Punkte</span>
+            <span id="score-text" class="stat-chip-value">0</span>
+          </div>
+          <div id="streak-chip" class="stat-chip stat-chip-streak hidden">
+            <span class="stat-chip-label">Streak</span>
+            <span id="streak-value" class="stat-chip-value">0 🔥</span>
           </div>
         </div>
       </div>
 
-      <div class="quiz-card">
-        <div id="streak-badge" class="streak-badge hidden">🔥 <span id="streak-value">0</span></div>
-        <p id="question-prompt" class="question-prompt"></p>
-        <div id="question-display" class="question-display"></div>
-        <div id="answer-grid" class="answer-grid"></div>
-        <div id="feedback" class="feedback"></div>
+      <!-- Timer-Bar -->
+      <div class="timer-wrap" id="timer-wrap">
+        <div class="timer-bar">
+          <div id="timer-fill" class="timer-fill"></div>
+        </div>
+        <div id="timer-text" class="timer-text">15</div>
       </div>
 
-      <button id="btn-next" class="btn btn-primary btn-lg hidden">Weiter →</button>
+      <!-- Frage-Karte -->
+      <div class="quiz-card">
+        <p id="question-prompt" class="question-prompt"></p>
+        <div id="question-image" class="question-image hidden"></div>
+        <h2 id="question-text" class="question-text"></h2>
+      </div>
+
+      <!-- Punkte-Popup -->
+      <div id="points-popup" class="points-popup hidden"></div>
+
+      <!-- 4 farbige Kacheln im Kahoot-Stil -->
+      <div id="answer-grid" class="answer-grid-kahoot">
+        <button class="answer-tile tile-red" data-slot="0" type="button">
+          <span class="tile-shape" aria-hidden="true">▲</span>
+          <span class="tile-key" aria-hidden="true">1</span>
+          <span class="tile-text"></span>
+        </button>
+        <button class="answer-tile tile-blue" data-slot="1" type="button">
+          <span class="tile-shape" aria-hidden="true">◆</span>
+          <span class="tile-key" aria-hidden="true">2</span>
+          <span class="tile-text"></span>
+        </button>
+        <button class="answer-tile tile-yellow" data-slot="2" type="button">
+          <span class="tile-shape" aria-hidden="true">●</span>
+          <span class="tile-key" aria-hidden="true">3</span>
+          <span class="tile-text"></span>
+        </button>
+        <button class="answer-tile tile-green" data-slot="3" type="button">
+          <span class="tile-shape" aria-hidden="true">■</span>
+          <span class="tile-key" aria-hidden="true">4</span>
+          <span class="tile-text"></span>
+        </button>
+      </div>
+
+      <!-- Feedback & Next -->
+      <div class="feedback-wrap">
+        <p id="feedback" class="feedback"></p>
+        <button id="btn-next" class="btn btn-primary btn-lg hidden">Weiter →</button>
+      </div>
     </section>
 
     <!-- ERGEBNIS-BILDSCHIRM -->
@@ -149,11 +216,16 @@
       <div class="result-card">
         <div id="result-emoji" class="result-emoji">🎉</div>
         <h2 id="result-title">Fertig!</h2>
-        <p id="result-score" class="result-score">0 / 10</p>
+        <p id="result-score" class="result-score">0</p>
+        <p id="result-subtitle" class="result-subtitle">Punkte</p>
         <p id="result-message" class="result-message"></p>
         <p id="result-new-hs" class="result-new-hs hidden">🏆 Neue Bestleistung!</p>
 
         <div class="result-stats">
+          <div class="stat">
+            <div class="stat-label">Richtig</div>
+            <div id="result-correct" class="stat-value">0/10</div>
+          </div>
           <div class="stat">
             <div class="stat-label">Beste Serie</div>
             <div id="result-best-streak" class="stat-value">0</div>
@@ -167,7 +239,7 @@
         <div id="result-review" class="result-review"></div>
 
         <div class="result-actions">
-          <button id="btn-retry" class="btn btn-primary">Nochmal spielen</button>
+          <button id="btn-retry" class="btn btn-primary">↻ Nochmal</button>
           <button id="btn-home" class="btn btn-ghost">Zum Menü</button>
         </div>
       </div>
