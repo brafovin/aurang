@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurang – Geografie-Quiz</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌍%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <main class="app">
+    <!-- START-BILDSCHIRM -->
+    <section id="screen-start" class="screen active">
+      <header class="hero">
+        <div class="globe">🌍</div>
+        <h1>Aurang</h1>
+        <p class="tagline">Das Geografie-Quiz für alle</p>
+      </header>
+
+      <div class="card">
+        <h2>Modus wählen</h2>
+        <div class="options" role="radiogroup" aria-label="Spielmodus">
+          <label class="option-tile">
+            <input type="radio" name="mode" value="capital" checked />
+            <span class="tile-icon">🏛️</span>
+            <span class="tile-label">Hauptstädte raten</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="mode" value="flag" />
+            <span class="tile-icon">🚩</span>
+            <span class="tile-label">Flaggen raten</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="mode" value="country" />
+            <span class="tile-icon">🗺️</span>
+            <span class="tile-label">Land zur Hauptstadt</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="mode" value="mixed" />
+            <span class="tile-icon">🎲</span>
+            <span class="tile-label">Gemischt</span>
+          </label>
+        </div>
+
+        <h2>Schwierigkeit</h2>
+        <div class="options" role="radiogroup" aria-label="Schwierigkeitsgrad">
+          <label class="option-tile">
+            <input type="radio" name="difficulty" value="1" checked />
+            <span class="tile-icon">🟢</span>
+            <span class="tile-label">Leicht</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="difficulty" value="2" />
+            <span class="tile-icon">🟡</span>
+            <span class="tile-label">Mittel</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="difficulty" value="3" />
+            <span class="tile-icon">🔴</span>
+            <span class="tile-label">Schwer</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="difficulty" value="0" />
+            <span class="tile-icon">🌐</span>
+            <span class="tile-label">Alle Länder</span>
+          </label>
+        </div>
+
+        <h2>Kontinent</h2>
+        <div class="options" role="radiogroup" aria-label="Kontinent">
+          <label class="option-tile">
+            <input type="radio" name="continent" value="all" checked />
+            <span class="tile-icon">🌍</span>
+            <span class="tile-label">Alle</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="continent" value="Europa" />
+            <span class="tile-icon">🏰</span>
+            <span class="tile-label">Europa</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="continent" value="Asien" />
+            <span class="tile-icon">🏯</span>
+            <span class="tile-label">Asien</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="continent" value="Afrika" />
+            <span class="tile-icon">🦁</span>
+            <span class="tile-label">Afrika</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="continent" value="Nordamerika" />
+            <span class="tile-icon">🗽</span>
+            <span class="tile-label">Nordamerika</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="continent" value="Südamerika" />
+            <span class="tile-icon">🌴</span>
+            <span class="tile-label">Südamerika</span>
+          </label>
+          <label class="option-tile">
+            <input type="radio" name="continent" value="Ozeanien" />
+            <span class="tile-icon">🏝️</span>
+            <span class="tile-label">Ozeanien</span>
+          </label>
+        </div>
+
+        <button id="btn-start" class="btn btn-primary btn-lg">Quiz starten</button>
+
+        <div class="highscore-box">
+          <span class="highscore-label">🏆 Bestleistung:</span>
+          <span id="highscore-value">—</span>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <small>Tipp: Mit den Tasten 1–4 kannst du Antworten auswählen.</small>
+      </footer>
+    </section>
+
+    <!-- QUIZ-BILDSCHIRM -->
+    <section id="screen-quiz" class="screen">
+      <div class="quiz-header">
+        <button id="btn-back" class="btn btn-ghost" aria-label="Zurück">← Menü</button>
+        <div class="progress-wrap">
+          <div class="progress-info">
+            <span id="progress-text">Frage 1/10</span>
+            <span id="score-text">Punkte: 0</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-card">
+        <div id="streak-badge" class="streak-badge hidden">🔥 <span id="streak-value">0</span></div>
+        <p id="question-prompt" class="question-prompt"></p>
+        <div id="question-display" class="question-display"></div>
+        <div id="answer-grid" class="answer-grid"></div>
+        <div id="feedback" class="feedback"></div>
+      </div>
+
+      <button id="btn-next" class="btn btn-primary btn-lg hidden">Weiter →</button>
+    </section>
+
+    <!-- ERGEBNIS-BILDSCHIRM -->
+    <section id="screen-result" class="screen">
+      <div class="result-card">
+        <div id="result-emoji" class="result-emoji">🎉</div>
+        <h2 id="result-title">Fertig!</h2>
+        <p id="result-score" class="result-score">0 / 10</p>
+        <p id="result-message" class="result-message"></p>
+        <p id="result-new-hs" class="result-new-hs hidden">🏆 Neue Bestleistung!</p>
+
+        <div class="result-stats">
+          <div class="stat">
+            <div class="stat-label">Beste Serie</div>
+            <div id="result-best-streak" class="stat-value">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Genauigkeit</div>
+            <div id="result-accuracy" class="stat-value">0%</div>
+          </div>
+        </div>
+
+        <div id="result-review" class="result-review"></div>
+
+        <div class="result-actions">
+          <button id="btn-retry" class="btn btn-primary">Nochmal spielen</button>
+          <button id="btn-home" class="btn btn-ghost">Zum Menü</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="countries.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
